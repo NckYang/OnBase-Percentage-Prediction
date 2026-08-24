@@ -1,0 +1,12 @@
+{
+  "rate": 0.32,
+  "hit_rate": 0.22,
+  "walk_rate": 0.085,
+  "strikeout_rate": 0.225,
+  "whiff_rate": 0.105,
+  "chase_rate": 0.28,
+  "woba": 0.315,
+  "age": 28.0,
+  "release_speed": 92.0,
+  "spin_rate": 2200.0
+}

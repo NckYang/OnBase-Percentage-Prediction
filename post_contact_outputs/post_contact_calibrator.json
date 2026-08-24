@@ -1,0 +1,6 @@
+{
+  "method": "none",
+  "coef": 5.651552481165919,
+  "intercept": -2.834971663345992,
+  "input": "raw_xgboost_probability"
+}

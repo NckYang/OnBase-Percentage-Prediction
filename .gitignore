@@ -1,0 +1,21 @@
+# Raw and derived training data
+*.parquet
+CPBL-2024-OpenData/
+
+# Local credentials and Streamlit secrets
+.env
+.streamlit/secrets.toml
+
+# Python and editor artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# Reports and local experiment outputs are intentionally not deployed
+*.docx
+*.pptx
+feature_experiment_*/
