@@ -1,0 +1,126 @@
+{
+  "problem": "P(hit | ball put in play, information available at contact instant)",
+  "positive_events": [
+    "double",
+    "home_run",
+    "single",
+    "triple"
+  ],
+  "negative_events": [
+    "double_play",
+    "field_error",
+    "field_out",
+    "fielders_choice",
+    "fielders_choice_out",
+    "force_out",
+    "grounded_into_double_play",
+    "sac_fly",
+    "sac_fly_double_play",
+    "triple_play"
+  ],
+  "splits": {
+    "train": "2021",
+    "validation": "2022-01-01 through 2022-06-27",
+    "calibration": "after 2022-06-27 through 2022-12-31",
+    "test": "2023",
+    "reserved_external": "2024 (not evaluated)"
+  },
+  "best_params": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "tree_method": "hist",
+    "seed": 42,
+    "nthread": -1,
+    "max_depth": 6,
+    "eta": 0.03,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "min_child_weight": 3,
+    "gamma": 0.1
+  },
+  "best_iteration": 535,
+  "calibration_selected_on_2022": "none",
+  "metrics": {
+    "validation_raw": {
+      "n": 69716,
+      "hit_rate": 0.3240862929600092,
+      "brier": 0.14469930243480977,
+      "logloss": 0.441660160010658,
+      "roc_auc": 0.8445731343488928,
+      "pr_auc": 0.7417106775574125,
+      "ece_15": 0.00867225590278307
+    },
+    "calibration_raw": {
+      "n": 69438,
+      "hit_rate": 0.3215818427950114,
+      "brier": 0.13288440656563655,
+      "logloss": 0.41140345696398134,
+      "roc_auc": 0.8692301163231132,
+      "pr_auc": 0.7769676950835649,
+      "ece_15": 0.00655120517755421
+    },
+    "calibration_platt": {
+      "n": 69438,
+      "hit_rate": 0.3215818427950114,
+      "brier": 0.13450858663633491,
+      "logloss": 0.4204331576014479,
+      "roc_auc": 0.8692301163231132,
+      "pr_auc": 0.7769676950835649,
+      "ece_15": 0.03164729669947066
+    },
+    "test_constant": {
+      "n": 135349,
+      "hit_rate": 0.3305602553398991,
+      "brier": 0.2213057322255023,
+      "logloss": 0.634609989882293,
+      "roc_auc": 0.5,
+      "pr_auc": 0.3305602553398991,
+      "ece_15": 0.0039445273458944
+    },
+    "test_raw": {
+      "n": 135349,
+      "hit_rate": 0.3305602553398991,
+      "brier": 0.13565087901858683,
+      "logloss": 0.41830206950949356,
+      "roc_auc": 0.8665397532709334,
+      "pr_auc": 0.7800299303949296,
+      "ece_15": 0.009095191518863373
+    },
+    "test_platt": {
+      "n": 135349,
+      "hit_rate": 0.3305602553398991,
+      "brier": 0.13709173634009705,
+      "logloss": 0.42639691614983277,
+      "roc_auc": 0.8665397532709334,
+      "pr_auc": 0.7800299303949296,
+      "ece_15": 0.03056997647612966
+    },
+    "test_deployed": {
+      "n": 135349,
+      "hit_rate": 0.3305602553398991,
+      "brier": 0.13565087901858683,
+      "logloss": 0.41830206950949356,
+      "roc_auc": 0.8665397532709334,
+      "pr_auc": 0.7800299303949296,
+      "ece_15": 0.009095191518863373
+    },
+    "test_statcast_xba_common_subset": {
+      "n": 129597,
+      "hit_rate": 0.3301696798537003,
+      "brier": 0.13230182507114327,
+      "logloss": 0.4085762463804479,
+      "roc_auc": 0.8733387802076994,
+      "pr_auc": 0.7898876068270386,
+      "ece_15": 0.007575063736885762
+    },
+    "test_model_common_subset": {
+      "n": 129597,
+      "hit_rate": 0.3301696798537003,
+      "brier": 0.1317274075643691,
+      "logloss": 0.40845715232022123,
+      "roc_auc": 0.8742130211208708,
+      "pr_auc": 0.7902206172536705,
+      "ece_15": 0.009437687737152468
+    }
+  }
+}

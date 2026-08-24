@@ -15,7 +15,7 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Reports and local experiment outputs are intentionally not deployed
-*.docx
-*.pptx
+# Office temporary files and local experiment outputs
+~$*.docx
+~$*.pptx
 feature_experiment_*/

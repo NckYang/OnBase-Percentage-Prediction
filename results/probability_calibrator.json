@@ -1,0 +1,6 @@
+{
+  "method": "platt_scaling",
+  "coefficient": 1.0728490328210696,
+  "intercept": 0.04050334047292829,
+  "input": "logit_of_xgboost_probability"
+}
