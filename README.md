@@ -1,21 +1,20 @@
 # OnBase Percentage Prediction
 
 XGBoost-based professional-baseball probability prediction system. Deploy
-`streamlit_app.py` as the Streamlit entry point. One website contains two pages:
-
-- Plate-appearance final on-base probability
-- Contact-instant hit probability
+`streamlit_app.py` as the Streamlit entry point for the pre-pitch, final
+plate-appearance on-base probability model.
 
 ## Models
 
 - **Plate-appearance model:** before each pitch, estimates the probability that
   the plate appearance ultimately ends with the batter reaching base.
-- **Contact-instant model:** after contact, estimates hit probability using only
-  information available at contact. Final landing coordinates, actual flight
-  distance, and post-play batted-ball classifications are excluded.
 
-The two scores are not directly comparable because their targets and information
-cutoffs differ. Both interfaces provide local TreeSHAP explanations.
+The Streamlit app exposes both leagues in the left navigation:
+
+- MLB live-game inference from the MLB Stats API.
+- CPBL manual-state inference using compact 2018–2024 player profiles.
+
+Both interfaces provide local TreeSHAP explanations and count-scenario tables.
 
 ## Local run
 
@@ -30,13 +29,29 @@ intentionally excluded from the Streamlit runtime.
 ## Research materials
 
 - [`docs/`](docs/) contains the latest full report, final one-page project
-  resume, calibration curve, feature-importance figure, and the independent
-  contact-instant model notes.
+  resume, calibration curve, and feature-importance figure.
 - [`results/`](results/) contains model comparison, temporal test metrics,
-  hyperparameter search, ablation, feature-selection, calibration, and
-  contact-instant evaluation artifacts.
+  hyperparameter search, ablation, feature-selection, and calibration artifacts.
 - [`training/`](training/) contains the main training pipeline, deployment
   profile builder, and MLB player-name cache.
+
+## CPBL adaptation
+
+[`docs/CPBL_DATA.md`](docs/CPBL_DATA.md) documents the available CPBL sources,
+the field alignment, and the data gaps. After exporting CPBL public game-log
+events, run `python training/cpbl.py` to train the compatible pre-pitch model.
+
+The deployable CPBL model, 73-feature manifest, metrics, and compact player
+profiles live in [`cpbl_deployment/`](cpbl_deployment/). Rebuild the player
+profiles after refreshing the raw CPBL data with:
+
+```bash
+python training/prepare_cpbl_deployment_data.py
+```
+
+The CPBL page deliberately uses manual game-state inputs so deployment does not
+depend on a live third-party feed. Historical player features are precomputed;
+the 138 MB raw game-log CSV is not required by Streamlit.
 
 The raw `mlb_statcast_data.parquet` file is intentionally excluded because it is
 about 326 MB. To retrain on another device, download the private backup and put
@@ -58,7 +73,3 @@ root.
 | Model and target | Brier | Log Loss | ROC AUC | ECE |
 |---|---:|---:|---:|---:|
 | Plate-appearance final on-base probability | 0.20840 | 0.60586 | 0.60949 | 0.00605 |
-| Contact-instant hit probability | 0.13565 | 0.41830 | 0.86654 | 0.00910 |
-
-These scores must not be compared as if they were the same task. The targets
-and information available at prediction time are different.

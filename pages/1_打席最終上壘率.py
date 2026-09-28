@@ -64,6 +64,32 @@ def get_live_feed(game_pk):
     return api_get(f"/v1.1/game/{game_pk}/feed/live")
 
 
+@st.cache_data(ttl=3600)
+def days_since_previous_game(player_id, group, game_date, current_game_pk, default_days):
+    """Use MLB game logs instead of fixed rest-day placeholders at inference."""
+    try:
+        payload = api_get(
+            f"/v1/people/{player_id}/stats",
+            {"stats": "gameLog", "group": group, "season": game_date.year},
+        )
+        splits = nested(payload, "stats", default=[])
+        splits = splits[0].get("splits", []) if splits else []
+        prior_dates = []
+        for split in splits:
+            split_game = nested(split, "game", "gamePk")
+            split_date = split.get("date")
+            if not split_date or split_game == current_game_pk:
+                continue
+            played = date.fromisoformat(split_date)
+            if played <= game_date:
+                prior_dates.append(played)
+        return min(30, max(0, (game_date - max(prior_dates)).days)) if prior_dates else default_days
+    except Exception:
+        # The page remains usable if the live API is temporarily unavailable;
+        # the displayed default is only a transparent fallback, not the normal path.
+        return default_days
+
+
 @st.cache_resource
 def load_model():
     model = xgb.Booster()
@@ -144,11 +170,17 @@ def derive_live_state(feed, play_index, previous_pitch_count):
     plays = live["plays"]
     all_plays = plays.get("allPlays", [])
     current = all_plays[play_index]
+    game_pk = int(nested(feed, "gameData", "game", "pk", default=0) or 0)
+    game_date = date.fromisoformat(str(nested(
+        feed, "gameData", "datetime", "originalDate", default=str(date.today())
+    ))[:10])
     matchup = current["matchup"]
     batter_id = int(matchup["batter"]["id"])
     pitcher_id = int(matchup["pitcher"]["id"])
     batter_name = matchup["batter"]["fullName"]
     pitcher_name = matchup["pitcher"]["fullName"]
+    pitcher_rest = days_since_previous_game(pitcher_id, "pitching", game_date, game_pk, 4)
+    batter_rest = days_since_previous_game(batter_id, "hitting", game_date, game_pk, 1)
     all_current_events = pitch_events(current)
     events = all_current_events[:previous_pitch_count]
     latest = events[-1] if events else None
@@ -226,7 +258,7 @@ def derive_live_state(feed, play_index, previous_pitch_count):
         "times_faced": times_faced,
         "pitch_count": len(events) + 1,
         "game_pitch_count": len(all_prior_pitches),
-        "pitcher_rest": 4, "batter_rest": 1,
+        "pitcher_rest": pitcher_rest, "batter_rest": batter_rest,
         "previous_result": result_label,
         "previous_description": description,
         "previous_plate_z": float(nested(latest or {}, "pitchData", "coordinates", "pZ", default=2.5) or 2.5),

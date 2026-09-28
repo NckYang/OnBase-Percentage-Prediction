@@ -1,0 +1,43 @@
+{
+  "model": "CPBL pitch-by-pitch final on-base probability (no TrackMan)",
+  "input": "data\\cpbl\\cpbl_livelog.csv",
+  "temporal_split": "train=2018–2022; validation=2023; test=2024",
+  "train_states": 396550,
+  "validation_states": 90200,
+  "test_states": 106529,
+  "test_obp": 0.3363591134808362,
+  "brier": 0.21368407337415457,
+  "logloss": 0.6175134244109135,
+  "roc_auc": 0.6144172190216989,
+  "bootstrap_95ci_by_pa": {
+    "brier": [
+      0.21152726399756094,
+      0.21577114042832976
+    ],
+    "logloss": [
+      0.6129759284993493,
+      0.6220477062887181
+    ],
+    "roc_auc": [
+      0.6082684266245423,
+      0.6211264970468136
+    ]
+  },
+  "audit": {
+    "source_rows": 593810,
+    "plate_appearances": 153032,
+    "usable_pitch_states": 593279,
+    "labelled_plate_appearances": 153032,
+    "pa_boundary_method": "canonical pa_id",
+    "unknown_action_examples": {
+      "uncaught_third_strike": 98,
+      "interference": 17
+    },
+    "profile_coverage": {
+      "batter_handedness": 1.0,
+      "pitcher_handedness": 1.0,
+      "batter_birth_date": 0.9999325780956346,
+      "pitcher_birth_date": 0.9992617301471989
+    }
+  }
+}

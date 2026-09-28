@@ -1,0 +1,10 @@
+{
+  "rate": 0.33411312666631815,
+  "hit_rate": 0.2435765068743792,
+  "walk_hbp_rate": 0.09053661979193894,
+  "game_strike_rate": 0.61,
+  "game_ball_rate": 0.37,
+  "game_whiff_rate": 0.079,
+  "game_foul_rate": 0.181,
+  "reference_date": "2024-10-11"
+}
